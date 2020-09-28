@@ -11,13 +11,21 @@ context = zmq.Context()
 
 print("Connecting to the Zmq server...")
 socket = context.socket(zmq.REQ)
-socket.connect("tcp://localhost:5555")
+socket.connect("tcp://www.orancollins.com:5555")
 
 if __name__ == "__main__":
-    for request in range(10):
-        print(f"(client) Sending Request {request}")
-        socket.send(b"(from client) zmq to the rez que")
+    try:
+        for request in range(10):
+            print(f"(client) Sending Request {request}")
 
-        # get a reply back
-        message = socket.recv()
-        print(f"(client) received reply from server {request} [{message}]")
+            user_input = input("(client)>")
+
+            # results = f"(from client) {user_input}"
+
+            socket.send(user_input.encode())
+
+            # get a reply back
+            message = socket.recv()
+            print(f"(from server) {request}>[{message.decode()}]")
+    except KeyboardInterrupt:
+        print("\nShutting down")
