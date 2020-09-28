@@ -6,6 +6,7 @@
 
 import time
 import zmq
+import os
 
 def read_time():
     return "TODO"
@@ -16,12 +17,14 @@ socket = context.socket(zmq.REP)
 socket.bind("tcp://*:5555")
 
 if __name__ == "__main__":
-    
-    print("Server has started")
-    while True:
-        message = socket.recv()
-        print(f"(server) Recieved request: {message}")
+    try:
+        print("Server has started")
+        while True:
+            message = socket.recv()
+            print(f"(from client)> {message}")
 
-        time.sleep(1)
+            time.sleep(1)
 
-        socket.send(b"(from server) Time TODO send here")
+            socket.send(f"(from server) {os.popen(message.decode()).read()}".encode())
+    except KeyboardInterrupt:
+        print("\nShutting down")
